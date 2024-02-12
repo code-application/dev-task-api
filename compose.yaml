@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    container_name: code-dev-task-api
+    ports:
+      - 8080:8080
