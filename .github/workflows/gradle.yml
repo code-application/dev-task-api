@@ -35,17 +35,6 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
-    # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
-    # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
-    #
-    # - name: Setup Gradle
-    #   uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-    #   with:
-    #     gradle-version: '8.5'
-    #
-    # - name: Build with Gradle 8.5
-    #   run: gradle build
-
   dependency-submission:
     runs-on: ubuntu-latest
     permissions:
@@ -63,3 +52,32 @@ jobs:
       # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
       - name: Generate and submit dependency graph
         uses: gradle/actions/dependency-submission@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+
+  docker-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          token_format: access_token
+          workload_identity_provider: devtask-workload-pool-dev
+          service_account: devtask-sa-githubactions@code-dev-task-test-1.iam.gserviceaccount.com
+      - name: Login to Artifact Registry
+        uses: docker/login-action@v3
+        with:
+          registry: us-central1-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+      - name: Build image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./
+          file: ./docker/Dockerfile
+          push: true
+          tags: "us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.1"
