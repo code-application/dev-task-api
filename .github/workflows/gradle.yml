@@ -67,7 +67,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           token_format: access_token
-          workload_identity_provider: projects/102437470994/locations/global/workloadIdentityPools/devtask-workload-pool-dev/providers/github
+          workload_identity_provider: projects/102437470994/locations/global/workloadIdentityPools/code-devtask-workload-pool-dev/providers/github
           service_account: devtask-sa-githubactions@code-dev-task-test-1.iam.gserviceaccount.com
       - name: Login to Artifact Registry
         uses: docker/login-action@v3
