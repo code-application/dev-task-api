@@ -86,7 +86,7 @@ jobs:
           context: ./
           file: ./docker/Dockerfile
           push: true
-          tags: "us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.1"
+          tags: "us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.2"
 
   deploy-cloudrun:
     needs: [build, docker-build]
@@ -106,10 +106,10 @@ jobs:
           service_account: devtask-sa-githubactions@code-dev-task-test-1.iam.gserviceaccount.com
       - name: Create Service declaration
         run: |-
-          export CONTAINER_IMAGE="us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.1"
+          export CONTAINER_IMAGE="us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.2"
           export SERVICE_NAME="code-devtask-api-run"
           export PROJECT_ID="code-devtask-api-run"
-          export REVISION_TAG="v0.0.1"
+          export REVISION_TAG="v0.0.2"
           export CLOUD_RUN_SA="devtask-sa-cloudrun@code-dev-task-test-1.iam.gserviceaccount.com"
           export ENVIRONMENT="dev"
           envsubst < ./service-yaml/container.yaml > container-dev.yaml

@@ -7,6 +7,6 @@ RUN ./gradlew build -x test
 
 # Prod Stage
 FROM amazoncorretto:17.0.10-alpine3.19
-COPY --from=build /app/build/libs/dev-task-api-0.0.1-SNAPSHOT.jar /app/application.jar
+COPY --from=build /app/build/libs/dev-task-api-0.0.2-SNAPSHOT.jar /app/application.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/application.jar"]
