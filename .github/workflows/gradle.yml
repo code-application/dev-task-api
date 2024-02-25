@@ -85,6 +85,22 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           tags: "us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.1"
+
+  deploy-cloudrun:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: projects/102437470994/locations/global/workloadIdentityPools/code-devtask-workload-pool-dev/providers/github
+          service_account: devtask-sa-githubactions@code-dev-task-test-1.iam.gserviceaccount.com
       - name: Create Service declaration
         run: |-
           export CONTAINER_IMAGE="us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.1"
