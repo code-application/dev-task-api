@@ -5,6 +5,9 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
+# GitHub Actions のテンプレートより作成
+# リポジトリページ > Actions > New workflow > "Java with Gradle" のConfigureボタンを押下
+
 name: Java CI with Gradle
 
 on:
@@ -82,3 +85,20 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           tags: "us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.1"
+      - name: Create Service declaration
+        run: |-
+          export CONTAINER_IMAGE="us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.1"
+          export SERVICE_NAME="code-devtask-api-run"
+          export PROJECT_ID="code-devtask-api-run"
+          export REVISION_TAG="v0.0.1"
+          export CLOUD_RUN_SA="devtask-sa-cloudrun@code-dev-task-test-1.iam.gserviceaccount.com"
+          export ENVIRONMENT="dev"
+          envsubst < ./service-yaml/container.yaml > container-dev.yaml
+          cat container-dev.yaml
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: code-devtask-api-run
+          region: us-central1
+          metadata: container-dev.yaml
