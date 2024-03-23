@@ -8,7 +8,7 @@
 # GitHub Actions のテンプレートより作成
 # リポジトリページ > Actions > New workflow > "Java with Gradle" のConfigureボタンを押下
 
-name: Java CI with Gradle
+name: Java CI with Gradle for main branch
 
 on:
   push:
