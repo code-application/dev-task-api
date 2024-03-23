@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -37,8 +36,30 @@ jobs:
 
       - name: Build with Gradle Wrapper
         run: ./gradlew build
-  api-test:
+  docker-build-for-api-test:
     needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:v0.0.1
+  api-test:
+    needs: [build, docker-build-for-api-test]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -78,7 +99,7 @@ jobs:
         uses: gradle/actions/dependency-submission@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
   docker-build:
-    needs: build
+    needs: [build, docker-build-for-api-test, api-test]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -109,7 +130,7 @@ jobs:
           tags: "us-central1-docker.pkg.dev/code-dev-task-test-1/code-devtask-docker-registry/code-devtask-api:v0.0.2"
 
   deploy-cloudrun:
-    needs: [build, docker-build]
+    needs: [build, docker-build-for-api-test, api-test, docker-build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
