@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-
+      packages: read
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -82,6 +82,17 @@ jobs:
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
       - name: Execute API Tests
         run: ./gradlew apiTest
+    services:
+      api:
+        image: ghcr.io/code-application/dev-task-api-feature:v0.0.1
+        ports:
+          - 8080:8080
+        # Health Checkがなぜか失敗するが、APIテストのビルド時間が長い想定でAPIが起動するのに十分な時間がある想定のため、ヘルスチェックは実装していない
+        # options: >-
+        #   --health-cmd "curl http://localhost:8080/healthz || exit 1"
+        #   --health-interval 5s
+        #   --health-timeout 10s
+        #   --health-retries 5
 
   dependency-submission:
     needs: build
