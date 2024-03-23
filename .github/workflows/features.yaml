@@ -18,11 +18,16 @@ on:
     branches-ignore:
       - main
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-feature
+
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
 
     steps:
       - uses: actions/checkout@v4
@@ -39,11 +44,26 @@ jobs:
 
       - name: Build with Gradle Wrapper
         run: ./gradlew build
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:v0.0.1
   api-test:
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: read
 
     steps:
       - uses: actions/checkout@v4
@@ -59,6 +79,19 @@ jobs:
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
       - name: Execute API Tests
         run: ./gradlew apiTest
+    services:
+      api:
+        image: ghcr.io/code-application/dev-task-api-feature:v0.0.1
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.github_token }}
+        ports:
+          - 8080:8080
+        options: >-
+          --health-cmd "curl http://localhost:8080/ || exit 1"
+          --health-interval 5s
+          --health-timeout 10s
+          --health-retries 5
 
   dependency-submission:
     needs: build
