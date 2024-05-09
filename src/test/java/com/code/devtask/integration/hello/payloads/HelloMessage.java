@@ -1,4 +1,4 @@
-package com.code.devtask.integration.payloads;
+package com.code.devtask.integration.hello.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
