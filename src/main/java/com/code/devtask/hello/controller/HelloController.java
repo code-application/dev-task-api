@@ -1,4 +1,4 @@
-package com.code.devtask.controller;
+package com.code.devtask.hello.controller;
 
 import java.util.HashMap;
 import java.util.Map;
