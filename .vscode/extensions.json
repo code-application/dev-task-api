@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    "redhat.vscode-yaml",
+    "shengchen.vscode-checkstyle",
+    "ms-vscode-remote.remote-containers",
+    "ms-azuretools.vscode-docker",
+    "editorconfig.editorconfig",
+    "vscjava.vscode-java-pack",
+    "mhutchie.git-graph",
+    "github.vscode-github-actions",
+    "eamodio.gitlens",
+    "richardwillis.vscode-gradle-extension-pack",
+    "madhavd1.javadoc-tools",
+    "ms-vsliveshare.vsliveshare",
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "42crunch.vscode-openapi",
+    "sonarsource.sonarlint-vscode",
+    "arjun.swagger-viewer",
+    "wayou.vscode-todo-highlight",
+    "redhat.vscode-xml"
+  ]
+}

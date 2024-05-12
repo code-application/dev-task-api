@@ -2,6 +2,9 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id "com.rameshkp.openapi-merger-gradle-plugin" version "1.0.5"
+	id "org.openapi.generator" version "7.5.0"
+	id 'org.hidetake.swagger.generator' version '2.19.2'
 }
 
 group = 'com.code'
@@ -37,6 +40,10 @@ dependencies {
 	testImplementation 'io.rest-assured:rest-assured:5.3.0'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// OpenAPI
+	implementation group: 'com.rameshkp.openapi-merger-gradle-plugin', name: 'com.rameshkp.openapi-merger-gradle-plugin.gradle.plugin', version: '1.0.5', ext: 'pom'
+	swaggerUI 'org.webjars:swagger-ui:3.52.5'
 }
 
 test {
@@ -44,6 +51,51 @@ test {
         // explicitly exclude integration tests
         excludeTestsMatching "com.code.devtask.integration.*"
     }
+}
+
+openApiMerger {
+	// 統合するOpenAPIドキュメントのディレクトリ
+	inputDirectory.set(file("$rootDir/docs/openapi".toString()))
+	// 統合先
+	output {
+		directory.set(file("$rootDir/build/docs/openapi".toString()))
+		fileName.set("openapi")
+		fileExtension.set("yaml")
+	}
+	// 統合後のファイルに共通する情報の設定
+	openApi {
+		openApiVersion.set("3.0.2")
+		info {
+			title.set("DevTask API仕様書")
+			description.set("DevTask API仕様書")
+			version.set("1.0.0")
+		}
+	}
+}
+
+openApiGenerate {
+	generatorName.set("spring")
+	inputSpec.set("$rootDir/build/docs/openapi/openapi.yaml".toString())
+	outputDir.set("$rootDir/build/docs/generated".toString())
+	apiPackage.set("com.code.devtask.api")
+}
+
+swaggerSources {
+	openapi {
+		inputFile = file("$rootDir/build/docs/openapi/openapi.yaml".toString())
+	}
+}
+
+// 統合後のOpenAPIドキュメントを削除する
+task deleteOpenApi(type: Delete) {
+	delete files("$rootDir/build/docs/openapi/openapi.yaml".toString())
+}
+
+tasks.openApiGenerate {
+	// 生成済みのOpenAPIドキュメントを削除する
+	dependsOn deleteOpenApi
+	dependsOn tasks.mergeOpenApiFiles
+	tasks.mergeOpenApiFiles.mustRunAfter tasks.deleteOpenApi
 }
 
 tasks.named('test') {

@@ -1,0 +1,136 @@
+openapi: "3.0.2"
+info:
+  title: タスクAPI
+  version: "1.0"
+paths:
+  /tasks:
+    get:
+      summary: タスク一覧取得
+      description: |
+        タスクの一覧を取得する。
+
+        現状はユーザーの識別をしていないため、全ユーザーのタスク情報を取得する。
+      responses:
+        "200":
+          description: 正常終了
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+    post:
+      summary: タスク登録
+      description: |
+        タスクを登録する。
+
+        タスクIDはAPI側で採番される。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreateRequest"
+      responses:
+        "201":
+          description: |
+            登録成功。
+
+            登録したタスク情報が返却される。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+    put:
+      summary: タスク更新
+      description: |
+        タスクを更新する。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskUpdateRequest"
+      responses:
+        "200":
+          description: |
+            更新成功。
+
+            更新したタスク情報が返却される。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+    delete:
+      summary: タスク削除
+      description: |
+        タスクを削除する。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskDeleteRequest"
+      responses:
+        "200":
+          description: |
+            削除成功。
+
+            何も返さない。
+components:
+  schemas:
+    Task:
+      description: タスク情報
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: タスクID
+        title:
+          type: string
+          description: タイトル
+        description:
+          type: string
+          description: 説明
+    TaskCreateRequest:
+      description: タスク登録APIのリクエスト
+      type: object
+      required:
+        - title
+        - description
+      properties:
+        title:
+          type: string
+          description: タイトル
+        description:
+          type: string
+          description: 説明
+    TaskUpdateRequest:
+      description: タスク更新APIのリクエスト
+      type: object
+      required:
+        - id
+        - title
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: タスクID
+        title:
+          type: string
+          description: タイトル
+        description:
+          type: string
+          description: 説明
+    TaskDeleteRequest:
+      description: タスク削除APIのリクエスト
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: タスクID
