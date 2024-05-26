@@ -18,7 +18,7 @@ public class TaskController {
     private TaskUseCase taskUseCase;
 
     @GetMapping("/api/tasks")
-    public GetTaskResponse getTasks(@RequestParam String param) {
+    public GetTaskResponse getTasks() {
         List<Task> tasks = taskUseCase.getTasks();
         GetTaskResponse response = new GetTaskResponse(tasks);
         return response;
