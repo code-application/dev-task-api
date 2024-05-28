@@ -35,3 +35,11 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### environment-specific settings
+application-local.yaml
+
+# gitkeep
+# .gitkeepを一番下に配置したいため、これより下に記述しないこと
+!.gitkeep
+

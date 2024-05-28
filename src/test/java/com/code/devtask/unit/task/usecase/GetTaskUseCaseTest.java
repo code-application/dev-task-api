@@ -21,16 +21,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.code.devtask.task.domain.Task;
 import com.code.devtask.task.domain.TaskRepository;
-import com.code.devtask.task.usecase.TaskUseCase;
+import com.code.devtask.task.usecase.GetTaskUseCase;
 
 @DisplayName("タスクのユースケーステスト")
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class TaskUseCaseTest {
+public class GetTaskUseCaseTest {
 
     @Autowired
     @InjectMocks
-    private TaskUseCase useCase;
+    private GetTaskUseCase useCase;
 
     @Mock
     private TaskRepository taskRepository;

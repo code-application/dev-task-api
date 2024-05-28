@@ -2,10 +2,18 @@ package com.code.devtask.task.domain;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
-@Repository
+/*
+ * タスクの永続化を行うリポジトリのインターフェース
+ */
+@Mapper
 public interface TaskRepository {
 
+    /*
+     * タスクの一覧を取得する
+     * 
+     * @return すべてのタスクを含むList
+     */
     List<Task> fetchTasks();
 }

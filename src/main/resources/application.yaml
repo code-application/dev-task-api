@@ -1,0 +1,28 @@
+spring:
+  # config:
+  #   import: optional:file:./application-local[.yaml]
+  devtools:
+    remote:
+      restart:
+        enabled: true
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${POSTGRES_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  mvc:
+    throw-exception-if-no-handler-found: true
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
+  typeAliasesPackage: com.code.devtask.*.domain
+  mapper-locations: file:src/main/java/com/code/devtask/**/infrastructure/mapper/*.xml
+  type-handlers-package: com.code.devtask.base.handler
+logging:
+  level:
+    org:
+      springframework: DEBUG
