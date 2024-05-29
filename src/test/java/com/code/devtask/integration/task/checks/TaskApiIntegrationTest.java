@@ -10,6 +10,7 @@ import com.code.devtask.integration.task.requests.TaskApi;
 
 import io.restassured.response.Response;
 
+@DisplayName("タスクAPIのテスト")
 public class TaskApiIntegrationTest {
 
     @Test
