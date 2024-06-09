@@ -2,6 +2,9 @@ package com.code.devtask.shared.exception;
 
 import org.springframework.http.HttpStatus;
 
+/*
+ * 404エラーレスポンス
+ */
 public class NotFoundErrorResponse extends ErrorResponse {
 
     public NotFoundErrorResponse() {

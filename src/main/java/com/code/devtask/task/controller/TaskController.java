@@ -25,7 +25,7 @@ public class TaskController {
      * 
      * @return すべてのタスクを含むリスト
      */
-    @GetMapping("/api/tasks")
+    @GetMapping("/tasks")
     public GetTaskResponse getTasks() {
         List<Task> tasks = getTaskUseCase.getTasks();
         GetTaskResponse response = new GetTaskResponse(tasks);

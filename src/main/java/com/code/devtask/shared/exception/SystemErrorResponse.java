@@ -2,6 +2,9 @@ package com.code.devtask.shared.exception;
 
 import org.springframework.http.HttpStatus;
 
+/*
+ * サーバーエラーのレスポンス
+ */
 public class SystemErrorResponse extends ErrorResponse {
 
     public SystemErrorResponse() {

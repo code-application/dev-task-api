@@ -2,6 +2,9 @@ package com.code.devtask.shared.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/*
+ * エラーレスポンスの構造を定義する
+ */
 public class ErrorResponse {
 
     @JsonProperty("status")

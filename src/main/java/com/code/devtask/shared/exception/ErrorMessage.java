@@ -1,5 +1,9 @@
 package com.code.devtask.shared.exception;
 
+/*
+ * エラーメッセージを定義するクラス
+ * 一覧としてもっておきたいため、1つのクラスに書く
+ */
 public class ErrorMessage {
 
     public static final String NOT_FOUND_MESSAGE = "Request Not Found";

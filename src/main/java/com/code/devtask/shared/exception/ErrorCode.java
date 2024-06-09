@@ -1,5 +1,8 @@
 package com.code.devtask.shared.exception;
 
+/*
+ * エラーコードの定数を保持するクラス
+ */
 public class ErrorCode {
 
     public static final String EB_BAD_REQUEST = "4000";
