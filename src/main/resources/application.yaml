@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: local
+  devtools:
+    remote:
+      restart:
+        enabled: true
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${POSTGRES_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  web:
+    resources:
+      add-mappings: false # 静的コンテンツの提供を無効にする。NoHandlerFoundExceptionをスローするための設定
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
+  typeAliasesPackage: com.code.devtask.*.domain
+  mapper-locations: file:src/main/java/com/code/devtask/**/infrastructure/mapper/*.xml
+  type-handlers-package: com.code.devtask.base.handler
+logging:
+  level:
+    org:
+      springframework: DEBUG

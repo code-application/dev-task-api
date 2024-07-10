@@ -23,11 +23,14 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 
 	// jackson
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+
+	runtimeOnly 'org.postgresql:postgresql'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -50,6 +53,7 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+// テスト実行時、APIサーバーとDBサーバーを起動させる必要がある
 tasks.register("apiTest", Test) {
 	description = 'Runs integration tests.'
 	group = 'verification'
@@ -58,4 +62,24 @@ tasks.register("apiTest", Test) {
 	filter {
 		includeTestsMatching "com.code.devtask.integration.*"
 	}
+	// プロパティを取得し、デフォルト値(local)を設定
+    def activeProfile = project.hasProperty('profile') ? project.profile : 'local'
+
+    doFirst {
+        println "Using profile: ${activeProfile}"
+    }
+
+    // テスト実行時にプロパティを設定
+    systemProperty 'spring.profiles.active', activeProfile
+
+}
+
+tasks.register("checkProfile") {
+	description = '現在使用しているプロファイルを確認する'
+    group = 'verification'
+
+	def activeProfile = project.hasProperty('spring.profiles.active') ? project['spring.profiles.active'] : 'not set'
+    doLast {
+        println "Active profile: ${activeProfile}"
+    }
 }
