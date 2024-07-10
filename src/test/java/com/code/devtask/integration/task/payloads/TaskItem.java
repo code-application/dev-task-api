@@ -12,6 +12,12 @@ public class TaskItem {
     @JsonProperty
     private String description;
 
+    public TaskItem(String id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+    }
+
     public String getId() {
         return id;
     }

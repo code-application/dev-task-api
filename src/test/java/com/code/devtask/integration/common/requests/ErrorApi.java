@@ -14,7 +14,7 @@ public class ErrorApi extends BaseApi {
     }
 
     public static Response postWrongMethodWithDefinedPath() {
-        Response response = given().contentType(ContentType.JSON).when().post(baseUrl + "/api/tasks");
+        Response response = given().contentType(ContentType.JSON).when().patch(baseUrl + "/api/tasks");
         System.out.println("response: " + response.toString());
         return response;
     }

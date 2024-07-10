@@ -26,10 +26,9 @@ public class TaskController {
      * @return すべてのタスクを含むリスト
      */
     @GetMapping("/tasks")
-    public GetTaskResponse getTasks() {
-        List<Task> tasks = getTaskUseCase.getTasks();
-        GetTaskResponse response = new GetTaskResponse(tasks);
-        return response;
+    public List<GetTaskResponseEntity> getTasks() {
+        List<Task> response = getTaskUseCase.getTasks();
+        GetTaskResponse tasks = new GetTaskResponse(response);
+        return tasks.getTaskList();
     }
-
 }

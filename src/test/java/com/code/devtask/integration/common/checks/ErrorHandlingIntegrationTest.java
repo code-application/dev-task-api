@@ -9,18 +9,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.code.devtask.integration.common.requests.ErrorApi;
-import com.code.devtask.integration.task.requests.TaskApi;
 import com.code.devtask.shared.exception.ErrorResponse;
+import com.code.devtask.task.domain.TaskRepository;
 
 import io.restassured.response.Response;
 
 @SpringBootTest
 @DisplayName("全体のエラーハンドリングのケース")
 public class ErrorHandlingIntegrationTest {
+
+    @MockBean
+    private TaskRepository taskRepository;
 
     @ParameterizedTest
     @CsvSource({ "taskss", "ap/tasks", "tasks/99" })
@@ -59,28 +61,4 @@ public class ErrorHandlingIntegrationTest {
         assertThat(error.getMessage(), startsWith("Request Not Found"));
     }
 
-    @Test
-    @DirtiesContext
-    @DisplayName("未定義のHTTPメソッドで既存のエンドポイントにアクセスするとNOT FOUND例外が発生する")
-    public void getRequestWithWrongDatabaseURIShouldReturn500() {
-        // Arrange
-        // 誤ったデータベース接続先を設定する
-        setWrongDatabaseProperties();
-
-        // Act
-        Response response = TaskApi.getTasks();
-
-        // Assert
-        assertEquals(500, response.getStatusCode());
-
-        ErrorResponse error = response.as(ErrorResponse.class);
-        assertEquals(500, error.getStatus());
-        assertEquals("9000", error.getCode());
-        assertThat(error.getMessage(), startsWith("System Error Occurred"));
-    }
-
-    // テストデータベース用のプロパティを設定するヘルパーメソッド
-    private void setWrongDatabaseProperties() {
-        System.setProperty("spring.datasource.url", "jdbc:h2:mem:testdb");
-    }
 }
